@@ -10,15 +10,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <a href="/admin/dashboard" class="logo">SMTP Panel</a>
-            <nav>
-                <a href="/admin/dashboard">Dashboard</a>
-                <a href="/admin">Clients</a>
-                <a href="/logout">Logout</a>
-            </nav>
-        </div>
-    </header>
-    <main class="main-content">
-        <div class="container">
+    <div class="page-wrapper">
+        <%- include('sidebar') %>
+        <main class="main-content">
+            <div class="container">
