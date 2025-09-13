@@ -35,38 +35,84 @@
                     <% if (domains.length === 0) { %>
                         <p>No domains added yet.</p>
                     <% } else { %>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Domain Name</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% domains.forEach(domain => { %>
-                                    <tr>
-                                        <td><%= domain.domainName %></td>
-                                        <td>
-                                            <% if (domain.verified) { %>
-                                                <span class="status-verified">Verified</span>
-                                            <% } else { %>
-                                                <span class="status-pending">Pending Verification</span>
-                                                <div class="verification-instructions">
-                                                    <p>To verify, add the following TXT record to your DNS settings for <strong><%= domain.domainName %></strong>:</p>
-                                                    <code>my-email-service-verification=<%= domain.domainName %></code>
-                                                </div>
-                                            <% } %>
-                                        </td>
-                                        <td>
-                                            <% if (!domain.verified) { %>
-                                                <a href="/admin/clients/<%= client.id %>/domains/<%= domain.id %>/verify" class="button-secondary">Verify Now</a>
-                                            <% } %>
-                                        </td>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                        </table>
+                        <% domains.forEach(domain => { %>
+                            <div class="domain-entry">
+                                <div class="domain-header">
+                                    <h3><%= domain.domainName %></h3>
+                                    <% if (domain.verified) { %>
+                                        <span class="status-verified">Verified</span>
+                                    <% } else { %>
+                                        <span class="status-pending">Pending Verification</span>
+                                    <% } %>
+                                </div>
+                                
+                                <div class="dns-records">
+                                    <h4>DNS Records for Deliverability</h4>
+                                    
+                                    <div class="record">
+                                        <span class="record-type">VERIFY</span>
+                                        <p>This record is required to prove you own the domain.</p>
+                                        <table>
+                                            <tr><th>Type</th><th>Hostname</th><th>Value</th></tr>
+                                            <tr>
+                                                <td>TXT</td>
+                                                <td><%= domain.domainName %></td>
+                                                <td><code>my-email-service-verification=<%= domain.domainName %></code></td>
+                                            </tr>
+                                        </table>
+                                        <% if (!domain.verified) { %>
+                                            <a href="/admin/clients/<%= client.id %>/domains/<%= domain.id %>/verify" class="button-secondary">Verify Now</a>
+                                        <% } %>
+                                    </div>
+
+                                    <div class="record">
+                                        <span class="record-type">SPF</span>
+                                        <p>This record lists authorized IP addresses that can send email for your domain.</p>
+                                        <table>
+                                            <tr><th>Type</th><th>Hostname</th><th>Value</th></tr>
+                                            <tr>
+                                                <td>TXT</td>
+                                                <td><%= domain.domainName %></td>
+                                                <td><code>v=spf1 a mx ip4:79.137.72.109 ~all</code></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="record">
+                                        <span class="record-type">DKIM</span>
+                                        <p>This record adds a digital signature to your emails to prevent tampering.</p>
+                                        <% if (domain.dkimPublicKey) { %>
+                                            <table>
+                                                <tr><th>Type</th><th>Hostname</th><th>Value</th></tr>
+                                                <tr>
+                                                    <td>TXT</td>
+                                                    <td><%= domain.dkimSelector %>._domainkey.<%= domain.domainName %></td>
+                                                    <td><code>v=DKIM1; k=rsa; p=<%= domain.dkimPublicKey %></code></td>
+                                                </tr>
+                                            </table>
+                                        <% } else { %>
+                                            <p>DKIM key not generated yet.</p>
+                                            <form action="/admin/clients/<%= client.id %>/domains/<%= domain.id %>/generate-dkim" method="POST">
+                                                <button type="submit">Generate DKIM Key</button>
+                                            </form>
+                                        <% } %>
+                                    </div>
+
+                                    <div class="record">
+                                        <span class="record-type">DMARC</span>
+                                        <p>This record tells receiving servers what to do if SPF or DKIM checks fail.</p>
+                                        <table>
+                                            <tr><th>Type</th><th>Hostname</th><th>Value</th></tr>
+                                            <tr>
+                                                <td>TXT</td>
+                                                <td>_dmarc.<%= domain.domainName %></td>
+                                                <td><code>v=DMARC1; p=none;</code></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
                     <% } %>
                 </div>
 

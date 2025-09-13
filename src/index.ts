@@ -7,6 +7,8 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 import express, { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import dns from 'dns/promises';
+import { exec } from 'child_process';
+import { promises as fs } from 'fs';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import cron from 'node-cron';
@@ -229,6 +231,54 @@ adminRouter.post('/clients/:id/domains', async (req: Request, res: Response) => 
         res.redirect(`/admin/clients/${clientId}`);
     } catch (error) {
         res.status(500).send('Error adding domain.');
+    }
+});
+
+adminRouter.post('/clients/:clientId/domains/:domainId/generate-dkim', async (req: Request, res: Response) => {
+    const { clientId, domainId } = req.params;
+    const dkimSelector = 'default'; // A common selector
+
+    try {
+        const db = await getDb();
+        const domain = await db.get('SELECT * FROM domains WHERE id = ? AND clientId = ?', domainId, clientId);
+        if (!domain) return res.status(404).send('Domain not found');
+
+        const dkimKeyPath = `/etc/opendkim/keys/${domain.domainName}`;
+        const command = `
+            sudo mkdir -p ${dkimKeyPath} &&
+            sudo opendkim-genkey -b 2048 -d ${domain.domainName} -D ${dkimKeyPath} -s ${dkimSelector} &&
+            sudo chown -R opendkim:opendkim ${dkimKeyPath}
+        `;
+
+        exec(command, async (error, stdout, stderr) => {
+            if (error) {
+                console.error(`DKIM generation error: ${stderr}`);
+                return res.status(500).send('Failed to generate DKIM key. Is OpenDKIM installed and configured?');
+            }
+
+            try {
+                const publicKey = await fs.readFile(`${dkimKeyPath}/${dkimSelector}.txt`, 'utf-8');
+                // Extract the key from the TXT record content, which is in parentheses
+                const keyContent = publicKey.match(/"p=([^"]+)"/);
+                if (!keyContent || !keyContent[1]) {
+                    throw new Error('Could not parse DKIM public key.');
+                }
+
+                await db.run(
+                    'UPDATE domains SET dkimSelector = ?, dkimPublicKey = ? WHERE id = ?',
+                    dkimSelector,
+                    keyContent[1].replace(/\s/g, ''),
+                    domainId
+                );
+                res.redirect(`/admin/clients/${clientId}`);
+            } catch (dbError) {
+                console.error('Error updating database with DKIM key:', dbError);
+                res.status(500).send('Error saving DKIM key to database.');
+            }
+        });
+
+    } catch (error) {
+        res.status(500).send('Error generating DKIM key.');
     }
 });
 

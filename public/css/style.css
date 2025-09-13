@@ -266,6 +266,62 @@ code {
     margin: 0;
 }
 
+.domain-entry {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.domain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-tertiary);
+    padding: 1rem 1.5rem;
+}
+
+.domain-header h3 {
+    margin: 0;
+}
+
+.dns-records {
+    padding: 1.5rem;
+}
+
+.dns-records h4 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.record {
+    margin-bottom: 1.5rem;
+}
+
+.record:last-child {
+    margin-bottom: 0;
+}
+
+.record-type {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.record p {
+    color: var(--text-muted);
+    margin-top: 0;
+}
+
+.record table {
+    font-size: 0.9rem;
+}
+
+.record table td code {
+    word-break: break-all;
+}
+
 .email-meta {
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;

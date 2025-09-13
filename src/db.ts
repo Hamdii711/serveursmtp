@@ -30,6 +30,8 @@ export const getDb = async () => {
             clientId INTEGER NOT NULL,
             domainName TEXT NOT NULL,
             verified BOOLEAN DEFAULT FALSE,
+            dkimSelector TEXT,
+            dkimPublicKey TEXT,
             FOREIGN KEY (clientId) REFERENCES clients(id) ON DELETE CASCADE,
             UNIQUE(clientId, domainName)
         );
