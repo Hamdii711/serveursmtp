@@ -1,15 +1,16 @@
-import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
+
+// Load environment variables BEFORE anything else
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+import express, { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import dns from 'dns/promises';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import { sendEmail } from './email';
 import { getDb } from './db';
-
-// Provide an explicit path to the .env file for robustness with PM2
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const port = process.env.PORT || 3000;
