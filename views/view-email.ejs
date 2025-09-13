@@ -1,0 +1,18 @@
+<%- include('partials/header', {title: 'View Email'}) %>
+
+<div class="header">
+    <h1>View Email</h1>
+    <a href="/admin/dashboard">&larr; Back to Dashboard</a>
+</div>
+
+<div class="card">
+    <div class="email-meta">
+        <p><strong>From:</strong> <%= email.fromAddress %></p>
+        <p><strong>To:</strong> <%= email.toAddress %></p>
+        <p><strong>Subject:</strong> <%= email.subject %></p>
+        <p><strong>Date:</strong> <%= new Date(email.sentAt).toLocaleString() %></p>
+    </div>
+    <iframe srcdoc="<%- email.body %>" class="email-preview"></iframe>
+</div>
+
+<%- include('partials/footer') %>

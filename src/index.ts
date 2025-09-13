@@ -9,6 +9,7 @@ import crypto from 'crypto';
 import dns from 'dns/promises';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import cron from 'node-cron';
 import { sendEmail } from './email';
 import { getDb } from './db';
 
@@ -95,11 +96,12 @@ app.post('/api/send', apiKeyAuth, async (req: AuthenticatedRequest, res: Respons
         // Log the email to the database
         const db = await getDb();
         await db.run(
-            'INSERT INTO email_logs (clientId, fromAddress, toAddress, subject) VALUES (?, ?, ?, ?)',
+            'INSERT INTO email_logs (clientId, fromAddress, toAddress, subject, body) VALUES (?, ?, ?, ?, ?)',
             client.id,
             from,
             to,
-            subject
+            subject,
+            html
         );
 
         res.status(200).json({ message: 'Email sent successfully' });
@@ -247,7 +249,47 @@ adminRouter.get('/clients/:clientId/domains/:domainId/verify', async (req: Reque
     }
 });
 
+adminRouter.get('/logs/:id', async (req: Request, res: Response) => {
+    try {
+        const db = await getDb();
+        const email = await db.get('SELECT * FROM email_logs WHERE id = ?', req.params.id);
+        if (!email) {
+            return res.status(404).send('Email log not found');
+        }
+        res.render('view-email', { email });
+    } catch (error) {
+        res.status(500).send('Error loading email log');
+    }
+});
+
+adminRouter.get('/settings', (req: Request, res: Response) => {
+    res.render('settings');
+});
+
+adminRouter.post('/settings/purge-logs', async (req: Request, res: Response) => {
+    try {
+        const db = await getDb();
+        await db.run('DELETE FROM email_logs');
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+        res.status(500).send('Error purging logs');
+    }
+});
+
 app.use('/admin', adminRouter);
+
+// --- Scheduled Tasks ---
+// Schedule a task to run at midnight every day to purge old logs.
+cron.schedule('0 0 * * *', async () => {
+    try {
+        console.log('Running scheduled job: Purging old email logs...');
+        const db = await getDb();
+        const result = await db.run("DELETE FROM email_logs WHERE sentAt < datetime('now', '-30 days')");
+        console.log(`Purged ${result.changes} old email logs.`);
+    } catch (error) {
+        console.error('Error during scheduled log purge:', error);
+    }
+});
 
 // --- Server Initialization ---
 getDb().then(() => {

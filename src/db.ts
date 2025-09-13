@@ -41,6 +41,7 @@ export const getDb = async () => {
             fromAddress TEXT NOT NULL,
             toAddress TEXT NOT NULL,
             subject TEXT NOT NULL,
+            body TEXT,
             FOREIGN KEY (clientId) REFERENCES clients(id) ON DELETE CASCADE
         );
     `);

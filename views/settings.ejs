@@ -1,0 +1,16 @@
+<%- include('partials/header', {title: 'Settings'}) %>
+
+<div class="header">
+    <h1>Settings</h1>
+</div>
+
+<div class="card">
+    <h2>Log Management</h2>
+    <p>Email logs are automatically purged after 30 days.</p>
+    <p>You can also manually delete all existing logs immediately. This action cannot be undone.</p>
+    <form action="/admin/settings/purge-logs" method="POST" onsubmit="return confirm('Are you sure you want to delete ALL email logs? This action is irreversible.');">
+        <button type="submit" class="button-danger">Purge All Logs Now</button>
+    </form>
+</div>
+
+<%- include('partials/footer') %>
