@@ -19,6 +19,8 @@ const port = process.env.PORT || 3000;
 // --- App Configuration ---
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
+// Set a base directory for EJS includes to resolve correctly
+app.locals.basedir = path.join(__dirname, '../views');
 
 // --- Middlewares ---
 app.use(express.json());
