@@ -1,46 +1,73 @@
-<%- include('partials/header', {title: 'Client Configuration'}) %>
-
-<div class="header">
-    <h1>Clients</h1>
-    <a href="/admin/dashboard" class="button-secondary">View Dashboard</a>
-</div>
-
-<div class="card">
-    <h2>Add New SaaS Client</h2>
-    <form action="/admin/clients" method="POST">
-        <div class="form-group">
-            <label for="clientName">Client Name (e.g., MySaaS)</label>
-            <input type="text" id="clientName" name="name" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Configuration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/admin/dashboard" class="logo">SMTP Panel</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin">Clients</a>
+                <a href="/admin/settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </nav>
         </div>
-        <button type="submit">Create Client & Generate API Key</button>
-    </form>
-</div>
+        <main class="main-content">
+            <div class="container">
+                <div class="header">
+                    <h1>Clients</h1>
+                    <a href="/admin/dashboard" class="button-secondary">View Dashboard</a>
+                </div>
 
-<div class="card">
-    <h2>Existing Clients</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Client Name</th>
-                <th>API Key</th>
-                <th class="actions-column">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% clients.forEach(client => { %>
-                <tr>
-                    <td><%= client.name %></td>
-                    <td><code><%= client.apiKey %></code></td>
-                    <td class="actions-cell">
-                        <a href="/admin/clients/<%= client.id %>" class="button-secondary">Manage</a>
-                        <form action="/admin/clients/<%= client.id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this client and all its data?');">
-                            <button type="submit" class="button-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-</div>
+                <div class="card">
+                    <h2>Add New SaaS Client</h2>
+                    <form action="/admin/clients" method="POST">
+                        <div class="form-group">
+                            <label for="clientName">Client Name (e.g., MySaaS)</label>
+                            <input type="text" id="clientName" name="name" required>
+                        </div>
+                        <button type="submit">Create Client & Generate API Key</button>
+                    </form>
+                </div>
 
-<%- include('partials/footer') %>
+                <div class="card">
+                    <h2>Existing Clients</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>API Key</th>
+                                <th class="actions-column">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% clients.forEach(client => { %>
+                                <tr>
+                                    <td><%= client.name %></td>
+                                    <td><code><%= client.apiKey %></code></td>
+                                    <td class="actions-cell">
+                                        <a href="/admin/clients/<%= client.id %>" class="button-secondary">Manage</a>
+                                        <form action="/admin/clients/<%= client.id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this client and all its data?');">
+                                            <button type="submit" class="button-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

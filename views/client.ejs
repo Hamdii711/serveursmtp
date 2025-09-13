@@ -1,60 +1,87 @@
-<%- include('partials/header', {title: `Manage Client - ${client.name}`}) %>
-
-<div class="header">
-    <h1>Manage Client: <%= client.name %></h1>
-    <a href="/admin">&larr; Back to All Clients</a>
-</div>
-<p><strong>API Key:</strong> <code><%= client.apiKey %></code></p>
-
-<div class="card">
-    <h2>Domains</h2>
-    <% if (domains.length === 0) { %>
-        <p>No domains added yet.</p>
-    <% } else { %>
-        <table>
-            <thead>
-                <tr>
-                    <th>Domain Name</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% domains.forEach(domain => { %>
-                    <tr>
-                        <td><%= domain.domainName %></td>
-                        <td>
-                            <% if (domain.verified) { %>
-                                <span class="status-verified">Verified</span>
-                            <% } else { %>
-                                <span class="status-pending">Pending Verification</span>
-                                <div class="verification-instructions">
-                                    <p>To verify, add the following TXT record to your DNS settings for <strong><%= domain.domainName %></strong>:</p>
-                                    <code>my-email-service-verification=<%= domain.domainName %></code>
-                                </div>
-                            <% } %>
-                        </td>
-                        <td>
-                            <% if (!domain.verified) { %>
-                                <a href="/admin/clients/<%= client.id %>/domains/<%= domain.id %>/verify" class="button-secondary">Verify Now</a>
-                            <% } %>
-                        </td>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    <% } %>
-</div>
-
-<div class="card">
-    <h2>Add New Domain</h2>
-    <form action="/admin/clients/<%= client.id %>/domains" method="POST">
-        <div class="form-group">
-            <label for="domainName">Domain Name (e.g., my-saas.com)</label>
-            <input type="text" id="domainName" name="domainName" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Client - <%= client.name %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/admin/dashboard" class="logo">SMTP Panel</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin">Clients</a>
+                <a href="/admin/settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </nav>
         </div>
-        <button type="submit">Add Domain</button>
-    </form>
-</div>
+        <main class="main-content">
+            <div class="container">
+                <div class="header">
+                    <h1>Manage Client: <%= client.name %></h1>
+                    <a href="/admin">&larr; Back to All Clients</a>
+                </div>
+                <p><strong>API Key:</strong> <code><%= client.apiKey %></code></p>
 
-<%- include('partials/footer') %>
+                <div class="card">
+                    <h2>Domains</h2>
+                    <% if (domains.length === 0) { %>
+                        <p>No domains added yet.</p>
+                    <% } else { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Domain Name</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% domains.forEach(domain => { %>
+                                    <tr>
+                                        <td><%= domain.domainName %></td>
+                                        <td>
+                                            <% if (domain.verified) { %>
+                                                <span class="status-verified">Verified</span>
+                                            <% } else { %>
+                                                <span class="status-pending">Pending Verification</span>
+                                                <div class="verification-instructions">
+                                                    <p>To verify, add the following TXT record to your DNS settings for <strong><%= domain.domainName %></strong>:</p>
+                                                    <code>my-email-service-verification=<%= domain.domainName %></code>
+                                                </div>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (!domain.verified) { %>
+                                                <a href="/admin/clients/<%= client.id %>/domains/<%= domain.id %>/verify" class="button-secondary">Verify Now</a>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } %>
+                </div>
+
+                <div class="card">
+                    <h2>Add New Domain</h2>
+                    <form action="/admin/clients/<%= client.id %>/domains" method="POST">
+                        <div class="form-group">
+                            <label for="domainName">Domain Name (e.g., my-saas.com)</label>
+                            <input type="text" id="domainName" name="domainName" required>
+                        </div>
+                        <button type="submit">Add Domain</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

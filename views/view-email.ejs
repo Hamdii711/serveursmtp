@@ -1,18 +1,45 @@
-<%- include('partials/header', {title: 'View Email'}) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Email</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/admin/dashboard" class="logo">SMTP Panel</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin">Clients</a>
+                <a href="/admin/settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+        <main class="main-content">
+            <div class="container">
+                <div class="header">
+                    <h1>View Email</h1>
+                    <a href="/admin/dashboard">&larr; Back to Dashboard</a>
+                </div>
 
-<div class="header">
-    <h1>View Email</h1>
-    <a href="/admin/dashboard">&larr; Back to Dashboard</a>
-</div>
-
-<div class="card">
-    <div class="email-meta">
-        <p><strong>From:</strong> <%= email.fromAddress %></p>
-        <p><strong>To:</strong> <%= email.toAddress %></p>
-        <p><strong>Subject:</strong> <%= email.subject %></p>
-        <p><strong>Date:</strong> <%= new Date(email.sentAt).toLocaleString() %></p>
+                <div class="card">
+                    <div class="email-meta">
+                        <p><strong>From:</strong> <%= email.fromAddress %></p>
+                        <p><strong>To:</strong> <%= email.toAddress %></p>
+                        <p><strong>Subject:</strong> <%= email.subject %></p>
+                        <p><strong>Date:</strong> <%= new Date(email.sentAt).toLocaleString() %></p>
+                    </div>
+                    <iframe srcdoc="<%- email.body %>" class="email-preview"></iframe>
+                </div>
+            </div>
+        </main>
     </div>
-    <iframe srcdoc="<%- email.body %>" class="email-preview"></iframe>
-</div>
-
-<%- include('partials/footer') %>
+</body>
+</html>

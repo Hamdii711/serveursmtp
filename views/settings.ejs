@@ -1,16 +1,43 @@
-<%- include('partials/header', {title: 'Settings'}) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/admin/dashboard" class="logo">SMTP Panel</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin">Clients</a>
+                <a href="/admin/settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+        <main class="main-content">
+            <div class="container">
+                <div class="header">
+                    <h1>Settings</h1>
+                </div>
 
-<div class="header">
-    <h1>Settings</h1>
-</div>
-
-<div class="card">
-    <h2>Log Management</h2>
-    <p>Email logs are automatically purged after 30 days.</p>
-    <p>You can also manually delete all existing logs immediately. This action cannot be undone.</p>
-    <form action="/admin/settings/purge-logs" method="POST" onsubmit="return confirm('Are you sure you want to delete ALL email logs? This action is irreversible.');">
-        <button type="submit" class="button-danger">Purge All Logs Now</button>
-    </form>
-</div>
-
-<%- include('partials/footer') %>
+                <div class="card">
+                    <h2>Log Management</h2>
+                    <p>Email logs are automatically purged after 30 days.</p>
+                    <p>You can also manually delete all existing logs immediately. This action cannot be undone.</p>
+                    <form action="/admin/settings/purge-logs" method="POST" onsubmit="return confirm('Are you sure you want to delete ALL email logs? This action is irreversible.');">
+                        <button type="submit" class="button-danger">Purge All Logs Now</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,50 +1,77 @@
-<%- include('partials/header', {title: 'Dashboard'}) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/admin/dashboard" class="logo">SMTP Panel</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin">Clients</a>
+                <a href="/admin/settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+        <main class="main-content">
+            <div class="container">
+                <div class="header">
+                    <h1>Dashboard</h1>
+                </div>
 
-<div class="header">
-    <h1>Dashboard</h1>
-</div>
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <h2>Total Emails Sent</h2>
+                        <p class="stat-number"><%= stats.totalEmails %></p>
+                    </div>
+                    <div class="card stat-card">
+                        <h2>Emails in Last 24h</h2>
+                        <p class="stat-number"><%= stats.emailsLast24h %></p>
+                    </div>
+                     <div class="card stat-card">
+                        <h2>Total Clients</h2>
+                        <p class="stat-number"><%= stats.totalClients %></p>
+                    </div>
+                </div>
 
-<div class="stats-grid">
-    <div class="card stat-card">
-        <h2>Total Emails Sent</h2>
-        <p class="stat-number"><%= stats.totalEmails %></p>
+                <div class="card">
+                    <h2>Recent Emails</h2>
+                    <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Client</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Subject</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% logs.forEach(log => { %>
+                                        <tr>
+                                            <td><%= new Date(log.sentAt).toLocaleString() %></td>
+                                            <td><%= log.clientName %></td>
+                                            <td><%= log.fromAddress %></td>
+                                            <td><%= log.toAddress %></td>
+                                            <td><%= log.subject %></td>
+                                            <td><a href="/admin/logs/<%= log.id %>" class="button-secondary">View</a></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
-    <div class="card stat-card">
-        <h2>Emails in Last 24h</h2>
-        <p class="stat-number"><%= stats.emailsLast24h %></p>
-    </div>
-     <div class="card stat-card">
-        <h2>Total Clients</h2>
-        <p class="stat-number"><%= stats.totalClients %></p>
-    </div>
-</div>
-
-<div class="card">
-    <h2>Recent Emails</h2>
-    <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Client</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Subject</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% logs.forEach(log => { %>
-                        <tr>
-                            <td><%= new Date(log.sentAt).toLocaleString() %></td>
-                            <td><%= log.clientName %></td>
-                            <td><%= log.fromAddress %></td>
-                            <td><%= log.toAddress %></td>
-                            <td><%= log.subject %></td>
-                            <td><a href="/admin/logs/<%= log.id %>" class="button-secondary">View</a></td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-    </table>
-</div>
-
-<%- include('partials/footer') %>
+</body>
+</html>
