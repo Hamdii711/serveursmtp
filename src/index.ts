@@ -193,6 +193,16 @@ adminRouter.post('/clients', async (req: Request, res: Response) => {
     }
 });
 
+adminRouter.post('/clients/:id/delete', async (req: Request, res: Response) => {
+    try {
+        const db = await getDb();
+        await db.run('DELETE FROM clients WHERE id = ?', req.params.id);
+        res.redirect('/admin');
+    } catch (error) {
+        res.status(500).send('Error deleting client.');
+    }
+});
+
 adminRouter.get('/clients/:id', async (req: Request, res: Response) => {
     try {
         const db = await getDb();

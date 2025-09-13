@@ -1,35 +1,96 @@
+:root {
+    --primary-color: #4a90e2;
+    --primary-hover: #357abd;
+    --danger-color: #e94b3c;
+    --danger-hover: #c0392b;
+    --secondary-color: #9babb4;
+    --secondary-hover: #7e8c95;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-color: #343a40;
+    --heading-color: #212529;
+    --border-color: #dee2e6;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
     margin: 0;
-    padding: 2rem;
-}
-
-a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 960px;
     margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header */
+.main-header {
+    background-color: var(--card-background);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    text-decoration: none;
+}
+
+.main-header nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.main-header nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.main-header nav a:hover {
+    color: var(--primary-color);
+}
+
+/* Main Content */
+.main-content {
+    padding-bottom: 2rem;
 }
 
 h1, h2 {
-    color: #2c3e50;
+    color: var(--heading-color);
+    font-weight: 700;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.header h1 {
+    margin: 0;
 }
 
 .card {
-    background-color: #ffffff;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .form-group {
@@ -45,38 +106,47 @@ h1, h2 {
 .form-group input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #dcdfe6;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: var(--font-family);
 }
 
-button, .button-secondary {
+button, .button-secondary, .button-danger {
     display: inline-block;
-    background-color: #3498db;
-    color: white;
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 4px;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
     text-align: center;
+    text-decoration: none;
+    color: white;
 }
 
-button:hover, .button-secondary:hover {
-    background-color: #2980b9;
-    color: white;
-    text-decoration: none;
+button {
+    background-color: var(--primary-color);
+}
+button:hover {
+    background-color: var(--primary-hover);
 }
 
 .button-secondary {
-    background-color: #bdc3c7;
+    background-color: var(--secondary-color);
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
 }
-
 .button-secondary:hover {
-    background-color: #95a5a6;
+    background-color: var(--secondary-hover);
+}
+
+.button-danger {
+    background-color: var(--danger-color);
+}
+.button-danger:hover {
+    background-color: var(--danger-hover);
 }
 
 table {
@@ -86,36 +156,37 @@ table {
 
 th, td {
     text-align: left;
-    padding: 0.75rem;
-    border-bottom: 1px solid #e8e8e8;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 th {
     font-weight: 600;
+    color: var(--heading-color);
 }
 
 code {
-    background-color: #e8f0f5;
+    background-color: #e9ecef;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 .status-verified {
-    color: #27ae60;
+    color: #28a745;
     font-weight: bold;
 }
 
 .status-pending {
-    color: #f39c12;
+    color: #fd7e14;
     font-weight: bold;
 }
 
 .verification-instructions {
     margin-top: 0.75rem;
     padding: 0.75rem;
-    background-color: #fdfaf4;
-    border: 1px solid #fbeeca;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
     border-radius: 4px;
     font-size: 0.9rem;
 }
@@ -126,12 +197,12 @@ code {
 
 .login-container {
     max-width: 400px;
-    margin-top: 5rem;
+    margin: 5rem auto;
 }
 
 .error-message {
-    color: #e74c3c;
-    background-color: #fbeaea;
+    color: var(--danger-color);
+    background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     padding: 0.75rem;
     border-radius: 4px;
@@ -156,14 +227,21 @@ code {
 
 .stat-number {
     font-size: 2.5rem;
-    font-weight: bold;
-    color: #3498db;
+    font-weight: 700;
+    color: var(--primary-color);
     margin: 0;
 }
 
-.header {
+.actions-column {
+    width: 220px;
+}
+
+.actions-cell {
     display: flex;
-    justify-content: space-between;
+    gap: 0.5rem;
     align-items: center;
-    margin-bottom: 1.5rem;
+}
+
+.actions-cell form {
+    margin: 0;
 }
