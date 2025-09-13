@@ -8,7 +8,8 @@ import cookieParser from 'cookie-parser';
 import { sendEmail } from './email';
 import { getDb } from './db';
 
-dotenv.config();
+// Provide an explicit path to the .env file for robustness with PM2
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const port = process.env.PORT || 3000;
