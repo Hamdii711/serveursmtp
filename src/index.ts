@@ -247,7 +247,7 @@ adminRouter.post('/clients/:clientId/domains/:domainId/generate-dkim', async (re
         const command = `
             sudo mkdir -p ${dkimKeyPath} &&
             sudo opendkim-genkey -b 2048 -d ${domain.domainName} -D ${dkimKeyPath} -s ${dkimSelector} &&
-            sudo chown -R opendkim:opendkim ${dkimKeyPath}
+            sudo chown -R ubuntu:ubuntu ${dkimKeyPath}
         `;
 
         exec(command, async (error, stdout, stderr) => {
