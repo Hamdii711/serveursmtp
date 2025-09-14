@@ -14,6 +14,7 @@ import cookieParser from 'cookie-parser';
 import cron from 'node-cron';
 import { sendEmail } from './email';
 import { getDb } from './db';
+import { addEmailToQueue } from './queue';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -94,24 +95,17 @@ app.post('/api/send', apiKeyAuth, async (req: AuthenticatedRequest, res: Respons
         return res.status(403).json({ error: `Domain <${fromDomain}> is not verified for this client.` });
     }
 
-    try {
-        await sendEmail({ from, to, subject, html });
+    // Add the email to the processing queue
+    addEmailToQueue({
+        from,
+        to,
+        subject,
+        html,
+        clientId: client.id
+    });
 
-        // Log the email to the database
-        const db = await getDb();
-        await db.run(
-            'INSERT INTO email_logs (clientId, fromAddress, toAddress, subject, body) VALUES (?, ?, ?, ?, ?)',
-            client.id,
-            from,
-            to,
-            subject,
-            html
-        );
-
-        res.status(200).json({ message: 'Email sent successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to send email' });
-    }
+    // Respond immediately
+    res.status(202).json({ message: 'Email accepted for processing' });
 });
 
 app.get('/login', (req: Request, res: Response) => {

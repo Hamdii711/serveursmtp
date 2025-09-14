@@ -1,0 +1,25 @@
+{
+  "name": "vps-manager-app",
+  "version": "1.0.0",
+  "description": "A desktop app to manage a VPS",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "package": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^31.2.1",
+    "ssh2-sftp-client": "^10.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.12",
+    "@types/ssh2-sftp-client": "^9.0.5",
+    "electron-builder": "^25.0.0",
+    "typescript": "^5.5.4"
+  }
+}

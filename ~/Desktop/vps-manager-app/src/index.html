@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VPS Manager</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>VPS Manager</h1>
+    <div id="connection-form">
+        <h2>Connect to Server</h2>
+        <input type="text" id="host" placeholder="Host IP">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="connect-btn">Connect</button>
+    </div>
+    <div id="dashboard" class="hidden">
+        <h2>Dashboard</h2>
+        <pre id="output"></pre>
+        <button id="uptime-btn">Get Uptime</button>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
